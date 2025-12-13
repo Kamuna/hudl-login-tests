@@ -1,0 +1,21 @@
+{
+  "Hudl": {
+    "HomepageUrl": "https://www.hudl.com/en_gb/",
+    "ValidUser": {
+      "Email": "philip.kamuna@live.com",
+      "Password": "Mayamiko23!"
+    },
+    "InvalidUsers": [
+      {
+        "Email": "valid.user@hudltest.com",
+        "Password": "WrongPassword",
+        "Reason": "Invalid password"
+      },
+      {
+        "Email": "invaliduser",
+        "Password": "SomePassword",
+        "Reason": "Invalid email"
+      }
+    ]
+  }
+}
