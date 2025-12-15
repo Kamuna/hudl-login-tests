@@ -6,6 +6,9 @@ namespace hudl_login_tests.Configuration
 {
     public static class TestConfiguration
     {
+        public static bool Headless =>
+            bool.TryParse(ConfigurationProvider.Get("Browser:Headless"), out var result) && result;
+
         public static string HomepageUrl =>
             ConfigurationProvider.Get("Hudl:HomepageUrl");
 
@@ -26,5 +29,38 @@ namespace hudl_login_tests.Configuration
 
         public static string InvalidEmailUserPassword =>
             ConfigurationProvider.Get("Hudl:InvalidUsers:1:Password");
+
+        public static string WrongEmail =>
+            ConfigurationProvider.Get("TestData:WrongEmail");
+
+        public static string SamplePassword =>
+            ConfigurationProvider.Get("TestData:SamplePassword");
+
+        public static int BoundaryTestLength =>
+            ConfigurationProvider.Get<int>("TestData:BoundaryTestLength");
+
+        public static string EmailDomainSuffix =>
+            ConfigurationProvider.Get("TestData:EmailDomainSuffix");
+
+        public static string ExpectedEmptyEmailMessage =>
+            ConfigurationProvider.Get("ExpectedMessages:EmptyEmail");
+
+        public static string ExpectedInvalidEmailMessage =>
+            ConfigurationProvider.Get("ExpectedMessages:InvalidEmail");
+
+        public static string ExpectedEmptyPasswordMessage =>
+            ConfigurationProvider.Get("ExpectedMessages:EmptyPassword");
+
+        public static string ExpectedInvalidCredentialsMessage =>
+            ConfigurationProvider.Get("ExpectedMessages:InvalidCredentials");
+
+        public static string LoginUrlPattern =>
+            ConfigurationProvider.Get("Urls:LoginUrlPattern");
+
+        public static string LoggedOutUrl =>
+            ConfigurationProvider.Get("Urls:LoggedOutUrl");
+
+        public static string HomePageUrl =>
+            ConfigurationProvider.Get("Urls:HomePageUrl");
     }
 }

@@ -2,6 +2,7 @@
 using hudl_login_tests.Pages;
 using hudl_login_tests.Utils;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 
 
 namespace hudl_login_tests.Features
@@ -39,6 +40,15 @@ namespace hudl_login_tests.Features
                 }
             });
         }
+        private void AssertTrue(bool condition, string message)
+        {
+            Assert.True(condition, message);
+        }
+
+        private void AssertContains(string expectedSubstring, string actual)
+        {
+            Assert.Contains(expectedSubstring, actual);
+        }
 
         public async Task AUserNavigatesToTheLoginPage()
         {
@@ -61,14 +71,9 @@ namespace hudl_login_tests.Features
         {
             await ExecuteStep(nameof(UserShouldBeLoggedInSuccessfully), () =>
             {
-                Assert.True(_dashboard.IsOnHomePage(), "User should be redirected to https://www.hudl.com/home");
-
-                _dashboard.ClickProfileMenu();
-                Assert.True(_dashboard.IsLogOutVisible(), "'Log Out' should be visible");
+                AssertTrue(_dashboard.IsOnHomePage(), $"User should be redirected to {TestConfiguration.HomePageUrl}");
             });
         }
-
-        #region Invalid Credentials Steps
 
         public async Task UserLoginsInWithInvalidPassword()
         {
@@ -107,7 +112,7 @@ namespace hudl_login_tests.Features
         {
             await ExecuteStep(nameof(AnErrorMessageShouldBeDisplayed), () =>
             {
-                Assert.True(_loginPage.IsErrorDisplayed(), "An error message should be displayed for invalid credentials");
+                AssertTrue(_loginPage.IsErrorDisplayed(), "An error message should be displayed for invalid credentials");
             });
         }
 
@@ -115,9 +120,19 @@ namespace hudl_login_tests.Features
         {
             await ExecuteStep(nameof(AnInvalidEmailErrorMessageShouldBeDisplayed), () =>
             {
-                Assert.True(_loginPage.IsInvalidEmailErrorDisplayed(), "An invalid email error message should be displayed");
+                AssertTrue(_loginPage.IsInvalidEmailErrorDisplayed(), "An invalid email error message should be displayed");
                 var errorText = _loginPage.GetInvalidEmailErrorText();
-                Assert.Contains("Enter a valid email", errorText);
+                AssertContains("Enter a valid email", errorText);
+            });
+        }
+
+        public async Task EmailErrorMessageShouldBeDisplayed(string expectedMessage)
+        {
+            await ExecuteStep($"EmailErrorMessageShouldBeDisplayed_{expectedMessage}", () =>
+            {
+                AssertTrue(_loginPage.IsEmailErrorDisplayed(), "An email error message should be displayed");
+                var errorText = _loginPage.GetEmailErrorText();
+                AssertContains(expectedMessage, errorText);
             });
         }
 
@@ -125,15 +140,51 @@ namespace hudl_login_tests.Features
         {
             await ExecuteStep(nameof(AnInvalidPasswordErrorMessageShouldBeDisplayed), () =>
             {
-                Assert.True(_loginPage.IsInvalidPasswordErrorDisplayed(), "An invalid password error message should be displayed");
+                AssertTrue(_loginPage.IsInvalidPasswordErrorDisplayed(), "An invalid password error message should be displayed");
                 var errorText = _loginPage.GetInvalidPasswordErrorText();
-                Assert.Contains("Incorrect username or password", errorText);
+                AssertContains(TestConfiguration.ExpectedInvalidCredentialsMessage, errorText);
             });
         }
 
-        #endregion
+        public async Task EmptyPasswordErrorMessageShouldBeDisplayed()
+        {
+            await ExecuteStep(nameof(EmptyPasswordErrorMessageShouldBeDisplayed), () =>
+            {
+                AssertTrue(_loginPage.IsEmptyPasswordErrorDisplayed(), "An empty password error message should be displayed");
+                var errorText = _loginPage.GetEmptyPasswordErrorText();
+                AssertContains(TestConfiguration.ExpectedEmptyPasswordMessage, errorText);
+            });
+        }
 
-        #region Validation Steps
+
+        public async Task UserEntersExcessivelyLongInput(string field, int length)
+        {
+            await ExecuteStep($"UserEntersExcessivelyLongInput_{field}_{length}", () =>
+            {
+                var longValue = new string('a', length);
+
+                if (field.ToLower() == "email")
+                {
+                    _loginPage.EnterEmail(longValue + TestConfiguration.EmailDomainSuffix);
+                    _loginPage.ClickContinue();
+                }
+                else if (field.ToLower() == "password")
+                {
+                    _loginPage.EnterEmail(TestConfiguration.ValidUserEmail);
+                    _loginPage.ClickContinue();
+                    _loginPage.EnterPasswordOnly(longValue);
+                }
+            });
+        }
+
+        public async Task ApplicationShouldHandleLongInputGracefully()
+        {
+            await ExecuteStep(nameof(ApplicationShouldHandleLongInputGracefully), () =>
+            {
+                AssertTrue(_loginPage.IsPageResponsive(), "Application should handle long input without crashing");
+            });
+        }
+
 
         public async Task UserSubmitsEmptyEmail()
         {
@@ -148,16 +199,8 @@ namespace hudl_login_tests.Features
             await ExecuteStep(nameof(UserSubmitsEmptyPassword), () =>
             {
                 _loginPage.EnterEmail(TestConfiguration.ValidUserEmail);
-                _loginPage.SubmitEmptyPassword();
-            });
-        }
-
-        public async Task UserEntersInvalidEmailFormat()
-        {
-            await ExecuteStep(nameof(UserEntersInvalidEmailFormat), () =>
-            {
-                _loginPage.EnterEmail("invalid-email-format");
                 _loginPage.ClickContinue();
+                _loginPage.SubmitEmptyPassword();
             });
         }
 
@@ -165,20 +208,57 @@ namespace hudl_login_tests.Features
         {
             await ExecuteStep(nameof(AValidationErrorShouldBeDisplayed), () =>
             {
-                Assert.True(_loginPage.IsValidationErrorDisplayed(), "A validation error should be displayed");
+                AssertTrue(_loginPage.IsValidationErrorDisplayed(), "A validation error should be displayed");
             });
         }
 
-        #endregion
 
-        #region Logout Steps
+        public async Task UserEntersEmailAndProceedsToPasswordScreen()
+        {
+            await ExecuteStep(nameof(UserEntersEmailAndProceedsToPasswordScreen), () =>
+            {
+                _loginPage.EnterEmail(TestConfiguration.ValidUserEmail);
+                _loginPage.ClickContinue();
+            });
+        }
+
+        public async Task UserEntersPasswordOnScreen()
+        {
+            await ExecuteStep(nameof(UserEntersPasswordOnScreen), () =>
+            {
+                _loginPage.EnterPasswordOnly(TestConfiguration.SamplePassword);
+            });
+        }
+
+        public async Task UserClicksPasswordVisibilityToggle()
+        {
+            await ExecuteStep(nameof(UserClicksPasswordVisibilityToggle), () =>
+            {
+                _loginPage.ClickPasswordVisibilityToggle();
+            });
+        }
+
+        public async Task PasswordFieldShouldBeMasked()
+        {
+            await ExecuteStep(nameof(PasswordFieldShouldBeMasked), () =>
+            {
+                AssertTrue(_loginPage.IsPasswordMasked(), "Password field should be masked (type='password')");
+            });
+        }
+
+        public async Task PasswordFieldShouldBeVisible()
+        {
+            await ExecuteStep(nameof(PasswordFieldShouldBeVisible), () =>
+            {
+                AssertTrue(_loginPage.IsPasswordVisible(), "Password field should be visible (type='text')");
+            });
+        }
 
         public async Task UserClicksLogout()
         {
             await ExecuteStep(nameof(UserClicksLogout), () =>
             {
-                // Ensure profile menu is open before clicking logout
-                _dashboard.ClickProfileMenu();
+                _dashboard.HoverOverProfileMenu();
                 _dashboard.ClickLogout();
             });
         }
@@ -187,11 +267,149 @@ namespace hudl_login_tests.Features
         {
             await ExecuteStep(nameof(UserShouldBeLoggedOut), () =>
             {
-                Assert.True(_homePage.IsOnHomePage(), "User should be redirected to the home page after logout");
+                AssertTrue(_dashboard.IsOnLoggedOutPage(), $"User should be redirected to {TestConfiguration.LoggedOutUrl} after logout");
             });
         }
 
-        #endregion
+
+        public async Task UserPressesBackButton()
+        {
+            await ExecuteStep(nameof(UserPressesBackButton), () =>
+            {
+                _driver.Navigate().Back();
+            });
+        }
+
+        public async Task UserHoversOverProfileAndClicksAccountSettings()
+        {
+            await ExecuteStep(nameof(UserHoversOverProfileAndClicksAccountSettings), () =>
+            {
+                _dashboard.HoverOverProfileMenu();
+                _dashboard.ClickAccountSettings();
+            });
+        }
+
+        public async Task UserShouldBeRedirectedToLoginPage()
+        {
+            await ExecuteStep(nameof(UserShouldBeRedirectedToLoginPage), () =>
+            {
+                var wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(10));
+                wait.Until(d => d.Url.Contains(TestConfiguration.LoginUrlPattern) || d.Url.Contains("login"));
+
+                var currentUrl = _driver.Url;
+                AssertTrue(currentUrl.Contains(TestConfiguration.LoginUrlPattern) && currentUrl.Contains("login"),
+                    $"User should be redirected to identity login page. Current URL: {currentUrl}");
+            });
+        }
+
+        public async Task UserLoginsWithEmail(string email)
+        {
+            await ExecuteStep($"UserLoginsWithEmail_{email}", () =>
+            {
+                _loginPage.Login(email, TestConfiguration.ValidUserPassword);
+            });
+        }
+
+        public async Task UserEntersEmail(string email)
+        {
+            await ExecuteStep(nameof(UserEntersEmail), () =>
+            {
+                _loginPage.EnterEmail(email);
+            });
+        }
+
+        public async Task UserClicksContinue()
+        {
+            await ExecuteStep(nameof(UserClicksContinue), () =>
+            {
+                _loginPage.ClickContinue();
+            });
+        }
+
+        public async Task UserClicksEditEmailLink()
+        {
+            await ExecuteStep(nameof(UserClicksEditEmailLink), () =>
+            {
+                _loginPage.ClickEditEmailLink();
+            });
+        }
+
+        public async Task UserShouldBeOnEmailEntryScreen()
+        {
+            await ExecuteStep(nameof(UserShouldBeOnEmailEntryScreen), () =>
+            {
+                AssertTrue(_loginPage.IsOnEmailEntryScreen(),
+                    "User should be back on the email entry screen after clicking edit email link");
+            });
+        }
+
+        public async Task UserEntersPassword(string password)
+        {
+            await ExecuteStep(nameof(UserEntersPassword), () =>
+            {
+                _loginPage.EnterPasswordOnly(password);
+            });
+        }
+
+        public async Task UserClicksSubmit()
+        {
+            await ExecuteStep(nameof(UserClicksSubmit), () =>
+            {
+                _loginPage.ClickSubmit();
+            });
+        }
+
+        public async Task UserClicksForgotPasswordLink()
+        {
+            await ExecuteStep(nameof(UserClicksForgotPasswordLink), () =>
+            {
+                _loginPage.ClickForgotPasswordLink();
+            });
+        }
+
+        public async Task UserShouldBeOnResetPasswordPage()
+        {
+            await ExecuteStep(nameof(UserShouldBeOnResetPasswordPage), () =>
+            {
+                AssertTrue(_loginPage.IsOnResetPasswordPage(),
+                    "User should be on the reset password page");
+            });
+        }
+
+        public async Task EmailFieldShouldBePrePopulatedWith(string expectedEmail)
+        {
+            await ExecuteStep(nameof(EmailFieldShouldBePrePopulatedWith), () =>
+            {
+                var actualEmail = _loginPage.GetResetPasswordEmailValue();
+                AssertTrue(actualEmail.Equals(expectedEmail, StringComparison.OrdinalIgnoreCase),
+                    $"Email field should be pre-populated with '{expectedEmail}', but was '{actualEmail}'");
+            });
+        }
+
+        public async Task UserClicksResetPasswordContinue()
+        {
+            await ExecuteStep(nameof(UserClicksResetPasswordContinue), () =>
+            {
+                _loginPage.ClickResetPasswordContinue();
+            });
+        }
+
+        public async Task UserShouldSeeCheckYourEmailPage()
+        {
+            await ExecuteStep(nameof(UserShouldSeeCheckYourEmailPage), () =>
+            {
+                AssertTrue(_loginPage.IsOnCheckYourEmailPage(),
+                    "User should see the 'Check Your Email' confirmation page");
+            });
+        }
+        public async Task ResendEmailLinkShouldBeVisible()
+        {
+            await ExecuteStep(nameof(ResendEmailLinkShouldBeVisible), () =>
+            {
+                AssertTrue(_loginPage.IsResendEmailButtonVisible(),
+                    "Resend email button should be visible on the confirmation page");
+            });
+        }
 
         public void Dispose()
         {

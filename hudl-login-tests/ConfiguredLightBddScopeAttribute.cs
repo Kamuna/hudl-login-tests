@@ -19,7 +19,6 @@ namespace hudl_login_tests
                 .DependencyContainerConfiguration()
                 .UseContainer(DependencyInjection.BuildServiceProvider(), takeOwnership: false);
 
-            // Go up from bin/Debug/net8.0 to project root, then into TestResults/Reports
             var projectRoot = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", ".."));
             var reportPath = Path.Combine(projectRoot, "TestResults", "Reports", "FeaturesReport.html");
 

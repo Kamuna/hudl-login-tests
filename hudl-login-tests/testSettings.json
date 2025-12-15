@@ -1,9 +1,12 @@
 {
+  "Browser": {
+    "Headless": true
+  },
   "Hudl": {
     "HomepageUrl": "https://www.hudl.com/en_gb/",
     "ValidUser": {
-      "Email": "philip.kamuna@live.com",
-      "Password": "Mayamiko23!"
+      "Email": "Enter your Email Address",
+      "Password": "Enter your password"
     },
     "InvalidUsers": [
       {
@@ -17,5 +20,22 @@
         "Reason": "Invalid email"
       }
     ]
+  },
+  "TestData": {
+    "WrongEmail": "wrong.email@test.com",
+    "SamplePassword": "TestPassword123",
+    "BoundaryTestLength": 500,
+    "EmailDomainSuffix": "@test.com"
+  },
+  "ExpectedMessages": {
+    "EmptyEmail": "Enter an email address",
+    "InvalidEmail": "Enter a valid email",
+    "EmptyPassword": "Enter your password",
+    "InvalidCredentials": "Incorrect username or password"
+  },
+  "Urls": {
+    "LoginUrlPattern": "identity.hudl.com",
+    "LoggedOutUrl": "https://www.hudl.com/en_gb/",
+    "HomePageUrl": "https://www.hudl.com/home"
   }
 }

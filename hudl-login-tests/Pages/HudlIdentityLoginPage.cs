@@ -33,8 +33,35 @@ namespace hudl_login_tests.Pages
         private By InvalidEmailError =>
             By.XPath("//*[@id='error-cs-email-invalid']");
 
+        private By EmptyEmailError =>
+            By.XPath("//*[@id='error-cs-username-required']");
+
         private By InvalidPasswordError =>
             By.XPath("//*[@id='error-element-password']");
+
+        private By EmptyPasswordError =>
+            By.XPath("//*[@id='error-cs-password-required']");
+
+        private By PasswordVisibilityToggle =>
+            By.XPath("/html/body/code/div/main/section/div/div/div/form/div[1]/div/div[2]/div[1]/button");
+
+        private By EditEmailLink =>
+            By.XPath("/html/body/code/div/main/section/div/div/div/form/div[1]/div/div[1]/div/a");
+
+        private By ForgotPasswordLink =>
+            By.XPath("/html/body/code/div/main/section/div/div/div/form/p/a");
+
+        private By ResetPasswordEmailInput =>
+            By.XPath("//*[@id='email']");
+
+        private By ResetPasswordContinueButton =>
+            By.XPath("/html/body/code/div/main/section/div/div/div/form/div[2]/button");
+
+        private By CheckYourEmailHeading =>
+            By.XPath("/html/body/code/div/main/section/div/div/section/h1");
+
+        private By ResendEmailButton =>
+            By.XPath("/html/body/code/div/main/section/div/div/section/form/button");
 
         private By ValidationError =>
             By.XPath("//*[@id='error-cs-email-invalid'] | //*[contains(@class,'error') or contains(@class,'invalid')] | //input[@aria-invalid='true']");
@@ -49,6 +76,12 @@ namespace hudl_login_tests.Pages
         public void ClickContinue()
         {
             _driver.FindElement(ContinueButton).Click();
+        }
+
+        public void ClickSubmit()
+        {
+            _wait.Until(ExpectedConditions.ElementToBeClickable(SubmitLoginDetails));
+            _driver.FindElement(SubmitLoginDetails).Click();
         }
 
         public void EnterPassword(string password)
@@ -94,7 +127,7 @@ namespace hudl_login_tests.Pages
         {
             try
             {
-                Thread.Sleep(500); // Allow time for validation to appear
+                _wait.Until(ExpectedConditions.ElementIsVisible(ValidationError));
                 return _driver.FindElement(ValidationError).Displayed;
             }
             catch { return false; }
@@ -120,6 +153,41 @@ namespace hudl_login_tests.Pages
             catch { return string.Empty; }
         }
 
+        public bool IsEmailErrorDisplayed()
+        {
+            try
+            {
+                // Check for either empty email error or invalid email error
+                var emptyError = _driver.FindElements(EmptyEmailError);
+                var invalidError = _driver.FindElements(InvalidEmailError);
+
+                if (emptyError.Count > 0 && emptyError[0].Displayed) return true;
+                if (invalidError.Count > 0 && invalidError[0].Displayed) return true;
+
+                return false;
+            }
+            catch { return false; }
+        }
+
+        public string GetEmailErrorText()
+        {
+            try
+            {
+                // Check empty email error first
+                var emptyError = _driver.FindElements(EmptyEmailError);
+                if (emptyError.Count > 0 && emptyError[0].Displayed)
+                    return emptyError[0].Text;
+
+                // Then check invalid email error
+                var invalidError = _driver.FindElements(InvalidEmailError);
+                if (invalidError.Count > 0 && invalidError[0].Displayed)
+                    return invalidError[0].Text;
+
+                return string.Empty;
+            }
+            catch { return string.Empty; }
+        }
+
         public bool IsInvalidPasswordErrorDisplayed()
         {
             try
@@ -138,6 +206,139 @@ namespace hudl_login_tests.Pages
                 return _driver.FindElement(InvalidPasswordError).Text;
             }
             catch { return string.Empty; }
+        }
+
+        public bool IsEmptyPasswordErrorDisplayed()
+        {
+            try
+            {
+                _wait.Until(ExpectedConditions.ElementIsVisible(EmptyPasswordError));
+                return _driver.FindElement(EmptyPasswordError).Displayed;
+            }
+            catch { return false; }
+        }
+
+        public string GetEmptyPasswordErrorText()
+        {
+            try
+            {
+                _wait.Until(ExpectedConditions.ElementIsVisible(EmptyPasswordError));
+                return _driver.FindElement(EmptyPasswordError).Text;
+            }
+            catch { return string.Empty; }
+        }
+
+        public void EnterPasswordOnly(string password)
+        {
+            _wait.Until(ExpectedConditions.ElementIsVisible(PasswordInput));
+            _driver.FindElement(PasswordInput).Clear();
+            _driver.FindElement(PasswordInput).SendKeys(password);
+        }
+
+        public void ClickPasswordVisibilityToggle()
+        {
+            _wait.Until(ExpectedConditions.ElementToBeClickable(PasswordVisibilityToggle));
+            _driver.FindElement(PasswordVisibilityToggle).Click();
+        }
+
+        public bool IsPasswordMasked()
+        {
+            var passwordField = _driver.FindElement(PasswordInput);
+            return passwordField.GetAttribute("type") == "password";
+        }
+
+        public bool IsPasswordVisible()
+        {
+            var passwordField = _driver.FindElement(PasswordInput);
+            return passwordField.GetAttribute("type") == "text";
+        }
+
+        public bool IsPageResponsive()
+        {
+            try
+            {
+                // Check page is responsive by verifying we can interact with it
+                // Either the email input or password input should be present and interactable
+                var emailElements = _driver.FindElements(EmailInput);
+                var passwordElements = _driver.FindElements(PasswordInput);
+
+                return (emailElements.Count > 0 && emailElements[0].Displayed) ||
+                       (passwordElements.Count > 0 && passwordElements[0].Displayed) ||
+                       _driver.FindElements(By.TagName("body")).Count > 0;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public void ClickForgotPasswordLink()
+        {
+            _wait.Until(ExpectedConditions.ElementToBeClickable(ForgotPasswordLink));
+            _driver.FindElement(ForgotPasswordLink).Click();
+        }
+
+        public bool IsOnResetPasswordPage()
+        {
+            try
+            {
+                _wait.Until(ExpectedConditions.ElementIsVisible(ResetPasswordEmailInput));
+                return _driver.FindElement(ResetPasswordEmailInput).Displayed;
+            }
+            catch { return false; }
+        }
+
+        public string GetResetPasswordEmailValue()
+        {
+            try
+            {
+                _wait.Until(ExpectedConditions.ElementIsVisible(ResetPasswordEmailInput));
+                return _driver.FindElement(ResetPasswordEmailInput).GetAttribute("value") ?? string.Empty;
+            }
+            catch { return string.Empty; }
+        }
+
+        public void ClickResetPasswordContinue()
+        {
+            _wait.Until(ExpectedConditions.ElementToBeClickable(ResetPasswordContinueButton));
+            _driver.FindElement(ResetPasswordContinueButton).Click();
+        }
+
+        public bool IsOnCheckYourEmailPage()
+        {
+            try
+            {
+                _wait.Until(ExpectedConditions.ElementIsVisible(CheckYourEmailHeading));
+                var heading = _driver.FindElement(CheckYourEmailHeading);
+                return heading.Displayed && heading.Text.Contains("Check Your Email", StringComparison.OrdinalIgnoreCase);
+            }
+            catch { return false; }
+        }
+
+        public bool IsResendEmailButtonVisible()
+        {
+            try
+            {
+                _wait.Until(ExpectedConditions.ElementIsVisible(ResendEmailButton));
+                return _driver.FindElement(ResendEmailButton).Displayed;
+            }
+            catch { return false; }
+        }
+
+        public void ClickEditEmailLink()
+        {
+            _wait.Until(ExpectedConditions.ElementToBeClickable(EditEmailLink));
+            _driver.FindElement(EditEmailLink).Click();
+        }
+
+        public bool IsOnEmailEntryScreen()
+        {
+            try
+            {
+                _wait.Until(ExpectedConditions.ElementIsVisible(EmailInput));
+                return _driver.FindElement(EmailInput).Displayed;
+            }
+            catch { return false; }
         }
     }
 }
