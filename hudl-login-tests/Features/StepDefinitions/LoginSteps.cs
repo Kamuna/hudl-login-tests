@@ -3,16 +3,10 @@ using OpenQA.Selenium;
 
 namespace hudl_login_tests.Features.StepDefinitions
 {
-    /// <summary>
-    /// Step definitions for core login functionality.
-    /// </summary>
     public class LoginSteps : BaseSteps
     {
         public LoginSteps(IWebDriver driver) : base(driver) { }
 
-        /// <summary>
-        /// Navigates to the Hudl login page.
-        /// </summary>
         public async Task AUserNavigatesToTheLoginPage()
         {
             await ExecuteStep(nameof(AUserNavigatesToTheLoginPage), () =>
@@ -22,9 +16,6 @@ namespace hudl_login_tests.Features.StepDefinitions
             });
         }
 
-        /// <summary>
-        /// Logs in with valid credentials from configuration.
-        /// </summary>
         public async Task UserLoginsInWithValidCredentials()
         {
             await ExecuteStep(nameof(UserLoginsInWithValidCredentials), () =>
@@ -33,9 +24,6 @@ namespace hudl_login_tests.Features.StepDefinitions
             });
         }
 
-        /// <summary>
-        /// Logs in with invalid password credentials.
-        /// </summary>
         public async Task UserLoginsInWithInvalidPassword()
         {
             await ExecuteStep(nameof(UserLoginsInWithInvalidPassword), () =>
@@ -44,9 +32,6 @@ namespace hudl_login_tests.Features.StepDefinitions
             });
         }
 
-        /// <summary>
-        /// Logs in with a specific email address.
-        /// </summary>
         public async Task UserLoginsWithEmail(string email)
         {
             await ExecuteStep($"UserLoginsWithEmail_{email}", () =>
@@ -54,10 +39,6 @@ namespace hudl_login_tests.Features.StepDefinitions
                 LoginPage.Login(email, TestConfiguration.ValidUserPassword);
             });
         }
-
-        /// <summary>
-        /// Enters email and clicks continue.
-        /// </summary>
         public async Task UserEntersEmailAndClicksContinue(string email)
         {
             await ExecuteStep($"UserEntersEmailAndClicksContinue_{email}", () =>
@@ -73,10 +54,6 @@ namespace hudl_login_tests.Features.StepDefinitions
                 }
             });
         }
-
-        /// <summary>
-        /// Enters email address only.
-        /// </summary>
         public async Task UserEntersEmail(string email)
         {
             await ExecuteStep(nameof(UserEntersEmail), () =>
@@ -84,10 +61,6 @@ namespace hudl_login_tests.Features.StepDefinitions
                 LoginPage.EnterEmail(email);
             });
         }
-
-        /// <summary>
-        /// Clicks the continue button.
-        /// </summary>
         public async Task UserClicksContinue()
         {
             await ExecuteStep(nameof(UserClicksContinue), () =>
@@ -95,10 +68,6 @@ namespace hudl_login_tests.Features.StepDefinitions
                 LoginPage.ClickContinue();
             });
         }
-
-        /// <summary>
-        /// Enters email and proceeds to password screen.
-        /// </summary>
         public async Task UserEntersEmailAndProceedsToPasswordScreen()
         {
             await ExecuteStep(nameof(UserEntersEmailAndProceedsToPasswordScreen), () =>
@@ -107,10 +76,6 @@ namespace hudl_login_tests.Features.StepDefinitions
                 LoginPage.ClickContinue();
             });
         }
-
-        /// <summary>
-        /// Enters password on the password screen.
-        /// </summary>
         public async Task UserEntersPasswordOnScreen()
         {
             await ExecuteStep(nameof(UserEntersPasswordOnScreen), () =>
@@ -118,10 +83,6 @@ namespace hudl_login_tests.Features.StepDefinitions
                 LoginPage.EnterPasswordOnly("TestPassword123");
             });
         }
-
-        /// <summary>
-        /// Enters a specific password.
-        /// </summary>
         public async Task UserEntersPassword(string password)
         {
             await ExecuteStep(nameof(UserEntersPassword), () =>
@@ -129,10 +90,6 @@ namespace hudl_login_tests.Features.StepDefinitions
                 LoginPage.EnterPasswordOnly(password);
             });
         }
-
-        /// <summary>
-        /// Clicks the submit/login button.
-        /// </summary>
         public async Task UserClicksSubmit()
         {
             await ExecuteStep(nameof(UserClicksSubmit), () =>
@@ -141,9 +98,6 @@ namespace hudl_login_tests.Features.StepDefinitions
             });
         }
 
-        /// <summary>
-        /// Clicks the edit email link on password screen.
-        /// </summary>
         public async Task UserClicksEditEmailLink()
         {
             await ExecuteStep(nameof(UserClicksEditEmailLink), () =>
@@ -152,9 +106,6 @@ namespace hudl_login_tests.Features.StepDefinitions
             });
         }
 
-        /// <summary>
-        /// Toggles password visibility.
-        /// </summary>
         public async Task UserClicksPasswordVisibilityToggle()
         {
             await ExecuteStep(nameof(UserClicksPasswordVisibilityToggle), () =>
@@ -163,9 +114,6 @@ namespace hudl_login_tests.Features.StepDefinitions
             });
         }
 
-        /// <summary>
-        /// Clicks logout from the profile menu.
-        /// </summary>
         public async Task UserClicksLogout()
         {
             await ExecuteStep(nameof(UserClicksLogout), () =>
@@ -174,10 +122,6 @@ namespace hudl_login_tests.Features.StepDefinitions
                 Dashboard.ClickLogout();
             });
         }
-
-        /// <summary>
-        /// Asserts user is logged in successfully.
-        /// </summary>
         public async Task UserShouldBeLoggedInSuccessfully()
         {
             await ExecuteStep(nameof(UserShouldBeLoggedInSuccessfully), () =>
@@ -186,9 +130,6 @@ namespace hudl_login_tests.Features.StepDefinitions
             });
         }
 
-        /// <summary>
-        /// Asserts user is logged out.
-        /// </summary>
         public async Task UserShouldBeLoggedOut()
         {
             await ExecuteStep(nameof(UserShouldBeLoggedOut), () =>
@@ -197,9 +138,6 @@ namespace hudl_login_tests.Features.StepDefinitions
             });
         }
 
-        /// <summary>
-        /// Asserts user is on email entry screen.
-        /// </summary>
         public async Task UserShouldBeOnEmailEntryScreen()
         {
             await ExecuteStep(nameof(UserShouldBeOnEmailEntryScreen), () =>

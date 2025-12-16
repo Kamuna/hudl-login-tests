@@ -8,9 +8,17 @@ namespace hudl_login_tests.Utils
         {
             get
             {
-                yield return new object[] { "", TestConfiguration.ExpectedEmptyEmailMessage };
-                yield return new object[] { "invalid-email-format", TestConfiguration.ExpectedInvalidEmailMessage };
-                yield return new object[] { "notarealemail", TestConfiguration.ExpectedInvalidEmailMessage };
+                var messageMap = new Dictionary<string, string>
+                {
+                    { "EmptyEmail", TestConfiguration.ExpectedEmptyEmailMessage },
+                    { "InvalidEmail", TestConfiguration.ExpectedInvalidEmailMessage }
+                };
+
+                foreach (var testCase in TestDataLoader.Data.InvalidEmailTestCases)
+                {
+                    var expectedMessage = messageMap.GetValueOrDefault(testCase.ExpectedMessage, testCase.ExpectedMessage);
+                    yield return new object[] { testCase.Email, expectedMessage };
+                }
             }
         }
 
@@ -18,9 +26,10 @@ namespace hudl_login_tests.Utils
         {
             get
             {
-                var length = TestConfiguration.BoundaryTestLength;
-                yield return new object[] { "email", length };
-                yield return new object[] { "password", length };
+                foreach (var testCase in TestDataLoader.Data.BoundaryTestCases)
+                {
+                    yield return new object[] { testCase.FieldName, testCase.Length };
+                }
             }
         }
 

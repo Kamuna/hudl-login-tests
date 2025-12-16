@@ -3,16 +3,12 @@ using OpenQA.Selenium.Support.UI;
 
 namespace hudl_login_tests.Features.StepDefinitions
 {
-    /// <summary>
-    /// Step definitions for security-related tests (back button, session handling).
-    /// </summary>
+   
     public class SecuritySteps : BaseSteps
     {
         public SecuritySteps(IWebDriver driver) : base(driver) { }
 
-        /// <summary>
-        /// Presses the browser back button.
-        /// </summary>
+       
         public async Task UserPressesBackButton()
         {
             await ExecuteStep(nameof(UserPressesBackButton), () =>
@@ -21,9 +17,7 @@ namespace hudl_login_tests.Features.StepDefinitions
             });
         }
 
-        /// <summary>
-        /// Hovers over profile and clicks account settings.
-        /// </summary>
+       
         public async Task UserHoversOverProfileAndClicksAccountSettings()
         {
             await ExecuteStep(nameof(UserHoversOverProfileAndClicksAccountSettings), () =>
@@ -33,9 +27,7 @@ namespace hudl_login_tests.Features.StepDefinitions
             });
         }
 
-        /// <summary>
-        /// Asserts user is redirected to login page.
-        /// </summary>
+        
         public async Task UserShouldBeRedirectedToLoginPage()
         {
             await ExecuteStep(nameof(UserShouldBeRedirectedToLoginPage), () =>

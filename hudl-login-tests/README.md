@@ -4,21 +4,43 @@ Selenium-based login tests for Hudl using LightBDD and xUnit.
 
 ## Setup
 
-1. Add your credentials to `testSettings.json`:
-   ```json
-   "Hudl": {
-     "ValidUser": {
-       "Email": "your-email@example.com",
-       "Password": "your-password"
-     }
-   }
-   ```
+Add your credentials to `testSettings.json`:
+```json
+{
+  "Browser": {
+    "Headless": true,
+    "Type": "chrome"
+  },
+  "Hudl": {
+    "HomepageUrl": "https://www.hudl.com/en_gb/",
+    "ValidUser": {
+      "Email": "your-email@example.com",
+      "Password": "your-password"
+    }
+  }
+}
+```
 
-2. Run tests:
-   ```
-   dotnet test
-   ```
+## Run Tests
 
-## Headless Mode
+```
+dotnet test
+```
 
-Set environment variable `BROWSER_HEADLESS=true` or update `testSettings.json`.
+## Test Data
+
+Add or modify test cases in `testData.json`:
+```json
+{
+  "InvalidEmailTestCases": [...],
+  "BoundaryTestCases": [...],
+  "LoginTestCases": [...],
+  "ExpectedMessages": {...},
+  "TestValues": {...},
+  "Urls": {...}
+}
+```
+
+## Browser Options
+
+Environment variables: `BROWSER_TYPE`, `BROWSER_HEADLESS`

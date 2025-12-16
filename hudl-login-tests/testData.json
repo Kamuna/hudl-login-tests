@@ -1,0 +1,79 @@
+{
+  "InvalidEmailTestCases": [
+    {
+      "Email": "",
+      "ExpectedMessage": "EmptyEmail",
+      "Description": "Empty email field"
+    },
+    {
+      "Email": "invalid-email-format",
+      "ExpectedMessage": "InvalidEmail",
+      "Description": "Missing @ symbol"
+    },
+    {
+      "Email": "notarealemail",
+      "ExpectedMessage": "InvalidEmail",
+      "Description": "No domain"
+    },
+    {
+      "Email": "@nodomain.com",
+      "ExpectedMessage": "InvalidEmail",
+      "Description": "No local part"
+    },
+    {
+      "Email": "test@",
+      "ExpectedMessage": "InvalidEmail",
+      "Description": "No domain after @"
+    }
+  ],
+  "BoundaryTestCases": [
+    {
+      "FieldName": "email",
+      "Length": 500,
+      "Description": "Excessively long email input"
+    },
+    {
+      "FieldName": "password",
+      "Length": 500,
+      "Description": "Excessively long password input"
+    }
+  ],
+  "LoginTestCases": [
+    {
+      "Scenario": "ValidCredentials",
+      "UseValidCredentials": true,
+      "ExpectedResult": "Success",
+      "Description": "Login with valid email and password"
+    },
+    {
+      "Scenario": "InvalidPassword",
+      "Email": "valid.user@hudltest.com",
+      "Password": "WrongPassword123",
+      "ExpectedResult": "InvalidCredentials",
+      "Description": "Valid email with wrong password"
+    },
+    {
+      "Scenario": "InvalidEmail",
+      "Email": "invaliduser",
+      "Password": "SomePassword",
+      "ExpectedResult": "InvalidCredentials",
+      "Description": "Invalid email format"
+    }
+  ],
+  "ExpectedMessages": {
+    "EmptyEmail": "Enter an email address",
+    "InvalidEmail": "Enter a valid email",
+    "EmptyPassword": "Enter your password",
+    "InvalidCredentials": "Incorrect username or password"
+  },
+  "TestValues": {
+    "WrongEmail": "wrong.email@test.com",
+    "SamplePassword": "TestPassword123",
+    "EmailDomainSuffix": "@test.com"
+  },
+  "Urls": {
+    "LoginUrlPattern": "identity.hudl.com",
+    "LoggedOutUrl": "https://www.hudl.com/en_gb/",
+    "HomePageUrl": "https://www.hudl.com/home"
+  }
+}

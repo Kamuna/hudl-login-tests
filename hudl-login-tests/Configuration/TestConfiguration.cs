@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Text.Json;
 using System.Collections.Generic;
+using hudl_login_tests.Utils;
 
 namespace hudl_login_tests.Configuration
 {
@@ -8,6 +9,9 @@ namespace hudl_login_tests.Configuration
     {
         public static bool Headless =>
             bool.TryParse(ConfigurationProvider.Get("Browser:Headless"), out var result) && result;
+
+        public static string BrowserType =>
+            ConfigurationProvider.Get("Browser:Type");
 
         public static string HomepageUrl =>
             ConfigurationProvider.Get("Hudl:HomepageUrl");
@@ -19,48 +23,42 @@ namespace hudl_login_tests.Configuration
             ConfigurationProvider.Get("Hudl:ValidUser:Password");
 
         public static string InvalidPasswordUserEmail =>
-            ConfigurationProvider.Get("Hudl:InvalidUsers:0:Email");
+            TestDataLoader.Data.LoginTestCases.First(x => x.Scenario == "InvalidPassword").Email;
 
         public static string InvalidPasswordUserPassword =>
-            ConfigurationProvider.Get("Hudl:InvalidUsers:0:Password");
+            TestDataLoader.Data.LoginTestCases.First(x => x.Scenario == "InvalidPassword").Password;
 
         public static string InvalidEmailUserEmail =>
-            ConfigurationProvider.Get("Hudl:InvalidUsers:1:Email");
-
-        public static string InvalidEmailUserPassword =>
-            ConfigurationProvider.Get("Hudl:InvalidUsers:1:Password");
+            TestDataLoader.Data.LoginTestCases.First(x => x.Scenario == "InvalidEmail").Email;
 
         public static string WrongEmail =>
-            ConfigurationProvider.Get("TestData:WrongEmail");
+            TestDataLoader.Data.TestValues.WrongEmail;
 
         public static string SamplePassword =>
-            ConfigurationProvider.Get("TestData:SamplePassword");
-
-        public static int BoundaryTestLength =>
-            ConfigurationProvider.Get<int>("TestData:BoundaryTestLength");
+            TestDataLoader.Data.TestValues.SamplePassword;
 
         public static string EmailDomainSuffix =>
-            ConfigurationProvider.Get("TestData:EmailDomainSuffix");
+            TestDataLoader.Data.TestValues.EmailDomainSuffix;
 
         public static string ExpectedEmptyEmailMessage =>
-            ConfigurationProvider.Get("ExpectedMessages:EmptyEmail");
+            TestDataLoader.Data.ExpectedMessages.EmptyEmail;
 
         public static string ExpectedInvalidEmailMessage =>
-            ConfigurationProvider.Get("ExpectedMessages:InvalidEmail");
+            TestDataLoader.Data.ExpectedMessages.InvalidEmail;
 
         public static string ExpectedEmptyPasswordMessage =>
-            ConfigurationProvider.Get("ExpectedMessages:EmptyPassword");
+            TestDataLoader.Data.ExpectedMessages.EmptyPassword;
 
         public static string ExpectedInvalidCredentialsMessage =>
-            ConfigurationProvider.Get("ExpectedMessages:InvalidCredentials");
+            TestDataLoader.Data.ExpectedMessages.InvalidCredentials;
 
         public static string LoginUrlPattern =>
-            ConfigurationProvider.Get("Urls:LoginUrlPattern");
+            TestDataLoader.Data.Urls.LoginUrlPattern;
 
         public static string LoggedOutUrl =>
-            ConfigurationProvider.Get("Urls:LoggedOutUrl");
+            TestDataLoader.Data.Urls.LoggedOutUrl;
 
         public static string HomePageUrl =>
-            ConfigurationProvider.Get("Urls:HomePageUrl");
+            TestDataLoader.Data.Urls.HomePageUrl;
     }
 }
