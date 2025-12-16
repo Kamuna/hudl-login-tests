@@ -41,6 +41,12 @@ Add or modify test cases in `testData.json`:
 }
 ```
 
+## Test Reports
+
+HTML reports are generated after each test run:
+- Location: `TestResults/Reports/FeaturesReport.html`
+- Screenshots captured on test failure
+
 ## Browser Options
 
 Environment variables: `BROWSER_TYPE`, `BROWSER_HEADLESS`
