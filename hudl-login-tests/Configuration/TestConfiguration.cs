@@ -55,6 +55,9 @@ namespace hudl_login_tests.Configuration
         public static string ExpectedInvalidCredentialsMessage =>
             TestDataLoader.Data.ExpectedMessages.InvalidCredentials;
 
+        public static string PasswordResetSuccessMessage =>
+            TestDataLoader.Data.ExpectedMessages.PasswordResetSuccess;
+
         public static string LoginUrlPattern =>
             TestDataLoader.Data.Urls.LoginUrlPattern;
 

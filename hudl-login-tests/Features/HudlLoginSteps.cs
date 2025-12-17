@@ -13,6 +13,7 @@ namespace hudl_login_tests.Features
         private readonly HudlHomePage _homePage;
         private readonly HudlIdentityLoginPage _loginPage;
         private readonly HudlDashboardPage _dashboard;
+        private readonly HudlAccountSettingsPage _accountSettings;
         private Exception? _lastException;
         private string _currentStepName = "Unknown";
 
@@ -22,6 +23,7 @@ namespace hudl_login_tests.Features
             _homePage = new HudlHomePage(driver);
             _loginPage = new HudlIdentityLoginPage(driver);
             _dashboard = new HudlDashboardPage(driver);
+            _accountSettings = new HudlAccountSettingsPage(driver);
         }
 
         private async Task ExecuteStep(string stepName, Action action)
@@ -408,6 +410,45 @@ namespace hudl_login_tests.Features
             {
                 AssertTrue(_loginPage.IsResendEmailButtonVisible(),
                     "Resend email button should be visible on the confirmation page");
+            });
+        }
+
+        public async Task UserClicksAccountSettings()
+        {
+            await ExecuteStep(nameof(UserClicksAccountSettings), () =>
+            {
+                _dashboard.HoverOverProfileMenu();
+                _dashboard.ClickAccountSettings();
+            });
+        }
+
+        public async Task UserShouldBeOnAccountSettingsPage()
+        {
+            await ExecuteStep(nameof(UserShouldBeOnAccountSettingsPage), () =>
+            {
+                AssertTrue(_accountSettings.IsOnAccountSettingsPage(),
+                    "User should be on the Account Settings/Profile page");
+            });
+        }
+
+        public async Task UserClicksResetPasswordButton()
+        {
+            await ExecuteStep(nameof(UserClicksResetPasswordButton), () =>
+            {
+                _accountSettings.ClickResetPassword();
+            });
+        }
+
+        public async Task PasswordResetSuccessToastShouldBeDisplayed()
+        {
+            await ExecuteStep(nameof(PasswordResetSuccessToastShouldBeDisplayed), () =>
+            {
+                AssertTrue(_accountSettings.IsSuccessToastDisplayed(),
+                    "Password reset success toast should be displayed");
+
+                var toastText = _accountSettings.GetSuccessToastText();
+                AssertTrue(toastText.Contains(TestConfiguration.PasswordResetSuccessMessage),
+                    $"Toast should contain '{TestConfiguration.PasswordResetSuccessMessage}', but was '{toastText}'");
             });
         }
 

@@ -65,6 +65,7 @@ namespace hudl_login_tests.Utils
         public string InvalidEmail { get; set; } = string.Empty;
         public string EmptyPassword { get; set; } = string.Empty;
         public string InvalidCredentials { get; set; } = string.Empty;
+        public string PasswordResetSuccess { get; set; } = string.Empty;
     }
 
     public class TestValuesConfig

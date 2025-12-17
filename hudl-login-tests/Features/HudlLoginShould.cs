@@ -199,5 +199,24 @@ I want to be able to login securely into the system")]
                 )
                 .RunAsync();
         }
+
+        [Scenario]
+        [ScenarioCategory("Authentication")]
+        [ScenarioCategory("PasswordReset")]
+        public async Task InitiatePasswordReset_FromAccountSettingsPage()
+        {
+            await Runner
+                .WithContext<HudlLoginSteps>()
+                .AddAsyncSteps(
+                    given => given.AUserNavigatesToTheLoginPage(),
+                    and => and.UserLoginsInWithValidCredentials(),
+                    and => and.UserShouldBeLoggedInSuccessfully(),
+                    when => when.UserClicksAccountSettings(),
+                    then => then.UserShouldBeOnAccountSettingsPage(),
+                    when => when.UserClicksResetPasswordButton(),
+                    then => then.PasswordResetSuccessToastShouldBeDisplayed()
+                )
+                .RunAsync();
+        }
     }
 }

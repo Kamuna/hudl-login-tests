@@ -64,7 +64,8 @@
     "EmptyEmail": "Enter an email address",
     "InvalidEmail": "Enter a valid email",
     "EmptyPassword": "Enter your password",
-    "InvalidCredentials": "Incorrect username or password"
+    "InvalidCredentials": "Incorrect username or password",
+    "PasswordResetSuccess": "Successfully sent reset password email."
   },
   "TestValues": {
     "WrongEmail": "wrong.email@test.com",

@@ -1,6 +1,6 @@
 {
   "Browser": {
-    "Headless": false,
+    "Headless": true,
     "Type": "chrome",
     "ScreenSize": "desktop"
   },
