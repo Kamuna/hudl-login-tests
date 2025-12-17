@@ -41,10 +41,10 @@ namespace hudl_login_tests.Utils
 
                 yield return new object[] { email.ToUpperInvariant() };
 
-                // Mixed case - capitalize first letter of each part
+
                 yield return new object[] { ToTitleCase(email) };
 
-                // Alternating case
+            
                 yield return new object[] { ToAlternatingCase(email) };
             }
         }

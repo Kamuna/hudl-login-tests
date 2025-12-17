@@ -16,6 +16,9 @@ namespace hudl_login_tests.Configuration
         public static string Get(string key) => ConfigurationRoot[key]
         ?? throw new ArgumentOutOfRangeException(nameof(key), $"Configuration for {key} not found.");
 
+        public static string GetOrDefault(string key, string defaultValue) =>
+            ConfigurationRoot[key] ?? defaultValue;
+
         public static T Get<T>(string key)
         {
             var valueString = Get(key);

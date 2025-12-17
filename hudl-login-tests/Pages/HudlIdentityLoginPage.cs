@@ -157,7 +157,6 @@ namespace hudl_login_tests.Pages
         {
             try
             {
-                // Check for either empty email error or invalid email error
                 var emptyError = _driver.FindElements(EmptyEmailError);
                 var invalidError = _driver.FindElements(InvalidEmailError);
 
@@ -173,12 +172,11 @@ namespace hudl_login_tests.Pages
         {
             try
             {
-                // Check empty email error first
                 var emptyError = _driver.FindElements(EmptyEmailError);
                 if (emptyError.Count > 0 && emptyError[0].Displayed)
                     return emptyError[0].Text;
 
-                // Then check invalid email error
+                
                 var invalidError = _driver.FindElements(InvalidEmailError);
                 if (invalidError.Count > 0 && invalidError[0].Displayed)
                     return invalidError[0].Text;
@@ -256,9 +254,7 @@ namespace hudl_login_tests.Pages
         public bool IsPageResponsive()
         {
             try
-            {
-                // Check page is responsive by verifying we can interact with it
-                // Either the email input or password input should be present and interactable
+            {                
                 var emailElements = _driver.FindElements(EmailInput);
                 var passwordElements = _driver.FindElements(PasswordInput);
 

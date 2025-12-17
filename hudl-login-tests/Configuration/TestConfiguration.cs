@@ -13,6 +13,9 @@ namespace hudl_login_tests.Configuration
         public static string BrowserType =>
             ConfigurationProvider.Get("Browser:Type");
 
+        public static string ScreenSize =>
+            ConfigurationProvider.GetOrDefault("Browser:ScreenSize", "desktop");
+
         public static string HomepageUrl =>
             ConfigurationProvider.Get("Hudl:HomepageUrl");
 

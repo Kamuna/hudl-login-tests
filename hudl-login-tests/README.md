@@ -4,15 +4,10 @@ Selenium-based login tests for Hudl using LightBDD and xUnit.
 
 ## Setup
 
-Add your credentials to `testSettings.json`:
+Create `testSettings.local.json` with your credentials (gitignored):
 ```json
 {
-  "Browser": {
-    "Headless": true,
-    "Type": "chrome"
-  },
   "Hudl": {
-    "HomepageUrl": "https://www.hudl.com/en_gb/",
     "ValidUser": {
       "Email": "your-email@example.com",
       "Password": "your-password"
@@ -49,4 +44,6 @@ HTML reports are generated after each test run:
 
 ## Browser Options
 
-Environment variables: `BROWSER_TYPE`, `BROWSER_HEADLESS`
+Environment variables: `BROWSER_TYPE`, `BROWSER_HEADLESS`, `BROWSER_SCREENSIZE`
+
+Screen sizes: `desktop` (1920x1080), `laptop` (1366x768), `tablet` (768x1024), `mobile` (375x812)

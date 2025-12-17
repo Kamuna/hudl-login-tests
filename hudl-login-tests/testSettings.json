@@ -1,13 +1,14 @@
 {
   "Browser": {
-    "Headless": true,
-    "Type": "chrome"
+    "Headless": false,
+    "Type": "chrome",
+    "ScreenSize": "desktop"
   },
   "Hudl": {
     "HomepageUrl": "https://www.hudl.com/en_gb/",
     "ValidUser": {
-      "Email": "your email",
-      "Password": "your password"
+      "Email": "your-email@example.com",
+      "Password": "your-password"
     }
   }
 }
