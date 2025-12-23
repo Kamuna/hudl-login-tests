@@ -2,12 +2,11 @@
 
 namespace hudl_login_tests.Pages
 {
-    public class HudlHomePage
+    public class HudlHomePage : BasePage
     {
-        private readonly IWebDriver _driver;
         private const string HomePageUrl = "https://www.hudl.com";
 
-        public HudlHomePage(IWebDriver driver) => _driver = driver;
+        public HudlHomePage(IWebDriver driver) : base(driver) { }
 
         private By LoginDropdown =>
             By.XPath("/html/body/header/div/div[2]/a");
@@ -15,17 +14,17 @@ namespace hudl_login_tests.Pages
         private By HudlLoginLink =>
             By.XPath("/html/body/header/div/div[2]/div/div/div/div/a[1]/span");
 
-        public void Open(string url) => _driver.Navigate().GoToUrl(url);
+        public void Open(string url) => Driver.Navigate().GoToUrl(url);
 
         public void GoToHudlLogin()
         {
-            _driver.FindElement(LoginDropdown).Click();
-            _driver.FindElement(HudlLoginLink).Click();
+            ClickElement(LoginDropdown);
+            ClickElement(HudlLoginLink);
         }
 
         public bool IsOnHomePage()
         {
-            return _driver.Url.StartsWith(HomePageUrl) && !_driver.Url.Contains("/home");
+            return Driver.Url.StartsWith(HomePageUrl) && !Driver.Url.Contains("/home");
         }
     }
 }
