@@ -173,9 +173,8 @@ namespace hudl_login_tests.Pages
         {
             try
             {
-                Wait.Until(ExpectedConditions.ElementIsVisible(CheckYourEmailHeading));
-                var heading = Driver.FindElement(CheckYourEmailHeading);
-                return heading.Displayed && heading.Text.Contains("Check Your Email", StringComparison.OrdinalIgnoreCase);
+                var headingText = GetElementText(CheckYourEmailHeading);
+                return headingText.Contains("Check Your Email", StringComparison.OrdinalIgnoreCase);
             }
             catch { return false; }
         }
